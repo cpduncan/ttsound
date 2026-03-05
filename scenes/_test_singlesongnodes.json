@@ -1,0 +1,30 @@
+{
+    "offset": {
+        "x": 72,
+        "y": 40
+    },
+    "listener": {
+        "x": -3,
+        "y": 171
+    },
+    "nodes": [
+        {
+            "x": 232,
+            "y": 206,
+            "name": "Behelit",
+            "radius": 183,
+            "playlist": [
+                "C:/Users/Admin/Desktop/ttsound/songs/BEHELIT.mp3"
+            ]
+        },
+        {
+            "x": 451,
+            "y": 215,
+            "name": "Serenity",
+            "radius": 272,
+            "playlist": [
+                "C:/Users/Admin/Desktop/ttsound/songs/Serenity.mp3"
+            ]
+        }
+    ]
+}

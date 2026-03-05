@@ -1,0 +1,30 @@
+{
+    "offset": {
+        "x": 0,
+        "y": 0
+    },
+    "listener": {
+        "x": 384,
+        "y": 216
+    },
+    "nodes": [
+        {
+            "type": "image",
+            "x": 72,
+            "y": 165,
+            "name": "Image 1",
+            "radius": null,
+            "width": 236,
+            "height": 102
+        },
+        {
+            "type": "circle",
+            "x": 529,
+            "y": 139,
+            "name": "Node 2",
+            "radius": 62,
+            "width": null,
+            "height": null
+        }
+    ]
+}

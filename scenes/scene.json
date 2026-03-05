@@ -1,0 +1,36 @@
+{
+    "offset": {
+        "x": 329,
+        "y": -82
+    },
+    "listener": {
+        "x": 358,
+        "y": 190
+    },
+    "nodes": [
+        {
+            "x": 81,
+            "y": 278,
+            "name": "Node 1",
+            "playlist": []
+        },
+        {
+            "x": 162,
+            "y": 357,
+            "name": "Node 2",
+            "playlist": []
+        },
+        {
+            "x": 669,
+            "y": 336,
+            "name": "Node 3",
+            "playlist": []
+        },
+        {
+            "x": -227,
+            "y": 367,
+            "name": "Node 4",
+            "playlist": []
+        }
+    ]
+}

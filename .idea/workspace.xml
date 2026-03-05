@@ -1,12 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c6d5056f-e3e4-439f-a096-4dd01548fb95" name="Changes" comment="" />
+    <list default="true" id="c6d5056f-e3e4-439f-a096-4dd01548fb95" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rec/JMH Typewriter-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/LukyansBug.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/_test_singlesongnodes.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/aaa.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/aaa2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/circle on the left.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/far right cluster.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/imgtest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/myScene.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/scene.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/the cross.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/songs/BEHELIT.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/songs/Serenity.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ttsound.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ttsound.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "cpduncan"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/cpduncan/ttsound.git",
+    "accountId": "4c679a78-38f4-47c5-b0ad-7031b11400f4"
+  }
+}]]></component>
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 3
 }]]></component>
@@ -18,11 +51,22 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "ai.playground.ignore.import.keys.banner.in.settings": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/Admin/Desktop/ttsound",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Admin\Desktop\ttsound" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -38,11 +82,14 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1772749435092</updated>
-      <workItem from="1772749436158" duration="1000" />
+      <workItem from="1772749436158" duration="1677000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ttsound$main.coverage" NAME="main Coverage Results" MODIFIED="1772750405579" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
