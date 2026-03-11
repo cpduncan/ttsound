@@ -1,0 +1,6 @@
+python ver supporting pygame (3.10 recommended)
+pygame >= 2.5.0
+
+my run looks like this:
+> cd app
+> py -3.10 -m main
