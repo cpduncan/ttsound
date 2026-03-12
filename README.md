@@ -13,22 +13,27 @@ An app for those who run TTRPG games seeking a solution that smoothly plays and 
 
 ### 1) python ver supporting pygame (3.10 recommended)
 
-```
-(windows)
+***windows***
+
+```bash
 > winget install Python.Python.3.10
-(linux)
+```
+
+***linux***
+
+```bash
 > sudo apt install python3.10
 ```
 
 ### 2) pygame >= 2.5.0
 
-```
+```bash
 > py -3.10 -m pip install pygame
 ```
 
 ### 3) run from appropriate directory (so python can reach the packages)
 
-```
+```bash
 > cd app
 > py -3.10 -m main
 ```
