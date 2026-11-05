@@ -1,73 +1,41 @@
-# React + TypeScript + Vite
+# Getting Started
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Click Add Emitter to create a new sound/music emitter.
+- Select an emitter and open its Inspector and Queue Manager.
+- Add audio file(s) using Add Files or Add Folder.
+- Drag the Listener node into an emitter's radius to hear audio.
+- Drag the listener between emitters to blend multiple sounds based on proximity.
 
-Currently, two official plugins are available:
+# Controls
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Canvas
+- Drag Listener: Move the listener.
+- Drag Emitter: Move an emitter.
+- Click Emitter: Select it.
+- Click Empty Space: Deselect.
+- Drag Empty Space: Pan viewport.
+- Mouse Wheel / Pinch: Zoom.
+- Right Click Emitter (or 500ms Long Press on touch): Open quick settings menu.
 
-## React Compiler
+Quick Settings Menu
+- Adjust radius.
+- Adjust volume.
+- Toggle mute.
+- Delete emitter.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Usage Details
 
-## Expanding the ESLint configuration
+Leaving a radius pauses playback and any active gap timer. Re-entering resumes from the exact previous position.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Additional actions:
+- Reorder tracks by dragging.
+- Remove tracks.
+- Skip to next track.
+- Scene Management
+- Save Scene
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Save scene exports a .zip file containing all emitter settings, playlist settings, and audio files for easy import and re-use.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Supported audio formats are any browser-supported audio/* files (MP3, WAV, OGG, M4A, etc.).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Scene ZIPs are portable and can be shared with other users of the application.
