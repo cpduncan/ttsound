@@ -2,7 +2,9 @@ import { useRef, useState } from 'react';
 import { audioEngine } from '../audio/AudioEngine';
 import { viewport } from '../canvas/viewport';
 import { applyParsedScene, exportSceneZip, parseSceneZip } from '../io/sceneZip';
+import { useAnimationStore } from '../store/animationStore';
 import { useSceneStore } from '../store/sceneStore';
+import { AnimationControls } from './AnimationControls';
 
 export function LeftTray() {
   const sceneName = useSceneStore((s) => s.scene.name);
@@ -34,6 +36,7 @@ export function LeftTray() {
   const onNew = () => {
     if (useSceneStore.getState().scene.emitters.length > 0 && !window.confirm('Start a new scene? Unsaved changes are lost.')) return;
     audioEngine.disposeAll();
+    useAnimationStore.getState().cancelMotion();
     useSceneStore.getState().resetScene();
   };
 
@@ -102,6 +105,8 @@ export function LeftTray() {
         Load Scene (.zip)
       </button>
       <input ref={loadInput} type="file" accept=".zip,application/zip" hidden onChange={onLoadChange} />
+      <hr />
+      <AnimationControls />
       <hr />
       <label className="field-col">
         Master volume

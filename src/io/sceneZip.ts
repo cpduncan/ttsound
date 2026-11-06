@@ -1,5 +1,6 @@
 import JSZip from 'jszip';
 import { audioEngine } from '../audio/AudioEngine';
+import { useAnimationStore } from '../store/animationStore';
 import { blobStore } from '../store/blobStore';
 import { useSceneStore } from '../store/sceneStore';
 import type { Emitter, GapMode, PlayOrder, Scene, Track, Vec2 } from '../types';
@@ -91,6 +92,7 @@ export async function parseSceneZip(file: File): Promise<ParsedScene> {
 /** Fully tears down the old scene (players, object URLs, blobs), then installs the new one. */
 export function applyParsedScene(parsed: ParsedScene): void {
   audioEngine.disposeAll();
+  useAnimationStore.getState().cancelMotion();
   blobStore.clear();
   for (const [id, blob] of parsed.blobs) blobStore.set(id, blob);
   useSceneStore.getState().setScene(parsed.scene);

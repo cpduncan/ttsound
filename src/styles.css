@@ -56,6 +56,18 @@ select {
   color: var(--text);
   min-width: 0;
 }
+button.active {
+  background: #5a4310;
+  border-color: #ffb347;
+}
+.anim-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.anim-status {
+  min-height: 2.4em;
+}
 hr {
   width: 100%;
   border: 0;

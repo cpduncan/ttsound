@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { listenerAnimator } from './animation/ListenerAnimator';
 import { audioEngine } from './audio/AudioEngine';
 import { CanvasView } from './canvas/CanvasView';
 import { ContextMenu } from './ui/ContextMenu';
@@ -9,7 +10,11 @@ import { RightTray } from './ui/RightTray';
 export default function App() {
   useEffect(() => {
     audioEngine.start();
-    return () => audioEngine.stop();
+    listenerAnimator.start();
+    return () => {
+      listenerAnimator.stop();
+      audioEngine.stop();
+    };
   }, []);
 
   return (

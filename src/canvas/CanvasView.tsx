@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { audioEngine } from '../audio/AudioEngine';
+import { useAnimationStore } from '../store/animationStore';
 import { useSceneStore } from '../store/sceneStore';
 import type { Vec2 } from '../types';
 import { hitTest, type Hit } from './hitTest';
@@ -48,7 +49,9 @@ export function CanvasView() {
     let raf = 0;
     const frame = () => {
       const { scene, selectedEmitterId } = useSceneStore.getState();
-      render(ctx2d, { width: w, height: h, dpr }, scene, selectedEmitterId, viewport);
+      const { target, armed } = useAnimationStore.getState();
+      render(ctx2d, { width: w, height: h, dpr }, scene, selectedEmitterId, viewport, target);
+      if (armed) canvas.style.cursor = 'crosshair';
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
@@ -59,6 +62,8 @@ export function CanvasView() {
     let downPos: Vec2 = { x: 0, y: 0 };
     let moved = false;
     let pressedHit: Hit = { kind: 'none' };
+    /** This press began while "Animate Listener" was armed: a click (no drag) places the target. */
+    let armedPress = false;
     let longPressTimer: number | null = null;
 
     const local = (e: { clientX: number; clientY: number }): Vec2 => {
@@ -98,6 +103,13 @@ export function CanvasView() {
 
       moved = false;
       downPos = p;
+      if (useAnimationStore.getState().armed) {
+        // Target-picking mode: skip hit-testing, any click is a target. Dragging still pans.
+        armedPress = true;
+        pressedHit = { kind: 'none' };
+        drag = { kind: 'pan', lastX: p.x, lastY: p.y };
+        return;
+      }
       const world = screenToWorld(viewport, p, w, h);
       const hit = hitTest(st.scene, world, viewport.zoom);
       pressedHit = hit;
@@ -128,7 +140,7 @@ export function CanvasView() {
         if (e.pointerType === 'mouse') {
           const st = useSceneStore.getState();
           const hit = hitTest(st.scene, screenToWorld(viewport, local(e), w, h), viewport.zoom);
-          canvas.style.cursor = hit.kind === 'none' ? 'default' : 'pointer';
+          canvas.style.cursor = useAnimationStore.getState().armed ? 'crosshair' : hit.kind === 'none' ? 'default' : 'pointer';
         }
         return;
       }
@@ -162,6 +174,7 @@ export function CanvasView() {
         case 'listener': {
           if (!moved) break;
           const wp = screenToWorld(viewport, p, w, h);
+          useAnimationStore.getState().clearTarget(); // manual drag takes control from the animation
           st.moveListener({ x: wp.x + drag.offset.x, y: wp.y + drag.offset.y });
           break;
         }
@@ -178,9 +191,14 @@ export function CanvasView() {
       if (!pointers.has(e.pointerId)) return;
       pointers.delete(e.pointerId);
       cancelLongPress();
-      if (!cancelled && drag?.kind === 'pan' && !moved && pressedHit.kind === 'none') {
-        useSceneStore.getState().select(null); // click on empty space
+      if (!cancelled && drag?.kind === 'pan' && !moved) {
+        if (armedPress) {
+          useAnimationStore.getState().setTarget(screenToWorld(viewport, local(e), w, h));
+        } else if (pressedHit.kind === 'none') {
+          useSceneStore.getState().select(null); // click on empty space
+        }
       }
+      armedPress = false;
       if (pointers.size === 0 || drag?.kind === 'pinch') drag = null;
     };
     const onPointerUp = (e: PointerEvent) => onPointerEnd(e, false);

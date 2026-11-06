@@ -1,5 +1,5 @@
 import { computeGain, isInside } from '../audio/gain';
-import type { Scene } from '../types';
+import type { Scene, Vec2 } from '../types';
 import { dist } from '../util/geometry';
 import { worldToScreen, type Viewport } from './viewport';
 
@@ -47,6 +47,7 @@ export function render(
   scene: Scene,
   selectedId: string | null,
   vp: Viewport,
+  target: Vec2 | null = null,
 ): void {
   const { width: w, height: h, dpr } = size;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -98,6 +99,28 @@ export function render(
     }
     ctx.fillStyle = TEXT;
     ctx.fillText(label, c.x, c.y - 9);
+  }
+
+  if (target) {
+    const ls = worldToScreen(vp, listener, w, h);
+    const t = worldToScreen(vp, target, w, h);
+    ctx.setLineDash([6, 6]);
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(255,179,71,0.6)';
+    ctx.beginPath();
+    ctx.moveTo(ls.x, ls.y);
+    ctx.lineTo(t.x, t.y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = LISTENER;
+    ctx.beginPath();
+    ctx.arc(t.x, t.y, 9, 0, Math.PI * 2);
+    ctx.moveTo(t.x - 14, t.y);
+    ctx.lineTo(t.x + 14, t.y);
+    ctx.moveTo(t.x, t.y - 14);
+    ctx.lineTo(t.x, t.y + 14);
+    ctx.stroke();
   }
 
   const l = worldToScreen(vp, listener, w, h);
