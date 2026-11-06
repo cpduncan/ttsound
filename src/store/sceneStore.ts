@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { ContextMenuState, Emitter, Scene, Track, Vec2 } from '../types';
+import { isCompact } from '../util/compact';
 import { clamp } from '../util/geometry';
 import { newId } from '../util/id';
 import { blobStore } from './blobStore';
@@ -14,6 +15,10 @@ export interface TrackInput {
 interface UiState {
   queuePanelOpen: boolean;
   contextMenu: ContextMenuState | null;
+  /** Left tool tray visible (false = tucked away, only its handle shows). */
+  leftTrayOpen: boolean;
+  /** Inspector visible. Starts collapsed on phones so the canvas stays clear. */
+  inspectorOpen: boolean;
 }
 
 export type EmitterPatch = Partial<Omit<Emitter, 'id'>>;
@@ -42,6 +47,8 @@ interface SceneState {
   select: (id: string | null) => void;
   setQueuePanelOpen: (open: boolean) => void;
   toggleQueuePanel: () => void;
+  toggleLeftTray: () => void;
+  toggleInspector: () => void;
   openContextMenu: (emitterId: string, x: number, y: number) => void;
   closeContextMenu: () => void;
 }
@@ -72,7 +79,7 @@ let emitterCounter = 0;
 export const useSceneStore = create<SceneState>()((set, get) => ({
   scene: createDefaultScene(),
   selectedEmitterId: null,
-  ui: { queuePanelOpen: false, contextMenu: null },
+  ui: { queuePanelOpen: false, contextMenu: null, leftTrayOpen: true, inspectorOpen: !isCompact() },
 
   addEmitter: (position) => {
     emitterCounter += 1;
@@ -181,8 +188,20 @@ export const useSceneStore = create<SceneState>()((set, get) => ({
   },
 
   select: (id) => set({ selectedEmitterId: id }),
-  setQueuePanelOpen: (open) => set((s) => ({ ui: { ...s.ui, queuePanelOpen: open } })),
-  toggleQueuePanel: () => set((s) => ({ ui: { ...s.ui, queuePanelOpen: !s.ui.queuePanelOpen } })),
+  // On phones the inspector sheet and the queue drawer would overlap, so opening one closes the other.
+  setQueuePanelOpen: (open) =>
+    set((s) => ({ ui: { ...s.ui, queuePanelOpen: open, inspectorOpen: open && isCompact() ? false : s.ui.inspectorOpen } })),
+  toggleQueuePanel: () =>
+    set((s) => {
+      const open = !s.ui.queuePanelOpen;
+      return { ui: { ...s.ui, queuePanelOpen: open, inspectorOpen: open && isCompact() ? false : s.ui.inspectorOpen } };
+    }),
+  toggleLeftTray: () => set((s) => ({ ui: { ...s.ui, leftTrayOpen: !s.ui.leftTrayOpen } })),
+  toggleInspector: () =>
+    set((s) => {
+      const open = !s.ui.inspectorOpen;
+      return { ui: { ...s.ui, inspectorOpen: open, queuePanelOpen: open && isCompact() ? false : s.ui.queuePanelOpen } };
+    }),
   openContextMenu: (emitterId, x, y) => set((s) => ({ ui: { ...s.ui, contextMenu: { emitterId, x, y } } })),
   closeContextMenu: () => set((s) => (s.ui.contextMenu ? { ui: { ...s.ui, contextMenu: null } } : s)),
 }));

@@ -5,12 +5,14 @@ import { applyParsedScene, exportSceneZip, parseSceneZip } from '../io/sceneZip'
 import { useAnimationStore } from '../store/animationStore';
 import { useSceneStore } from '../store/sceneStore';
 import { AnimationControls } from './AnimationControls';
+import { Dock } from './Dock';
 
 export function LeftTray() {
   const sceneName = useSceneStore((s) => s.scene.name);
   const masterVolume = useSceneStore((s) => s.scene.masterVolume);
   const hasSelection = useSceneStore((s) => s.selectedEmitterId !== null);
   const queueOpen = useSceneStore((s) => s.ui.queuePanelOpen);
+  const trayOpen = useSceneStore((s) => s.ui.leftTrayOpen);
   const [busy, setBusy] = useState(false);
   const loadInput = useRef<HTMLInputElement>(null);
 
@@ -79,6 +81,7 @@ export function LeftTray() {
   };
 
   return (
+    <Dock id="tools" side="left" open={trayOpen} onToggle={() => useSceneStore.getState().toggleLeftTray()} label="tools">
     <div className="left-tray">
       <input
         type="text"
@@ -121,5 +124,6 @@ export function LeftTray() {
       </label>
       <button onClick={() => useSceneStore.getState().toggleQueuePanel()}>{queueOpen ? 'Hide queue' : 'Show queue'}</button>
     </div>
+    </Dock>
   );
 }

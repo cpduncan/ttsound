@@ -10,35 +10,36 @@ export interface RenderSize {
   dpr: number;
 }
 
-const BG = '#181818';
-const GRID = 'rgba(255,255,255,0.06)';
-const EMITTER = '#5ab0ff';
-const EMITTER_MUTED = '#888888';
-const TEXT = '#e6e6e6';
-const LISTENER = '#ffb347';
+// Design tokens (keep in sync with :root in styles.css)
+const BG = '#000000';
+const DOT = '#27272a';
+const ACCENT = '#3b82f6';
+const ACCENT_BRIGHT = '#60a5fa';
+const TINT = '#1e3a8a';
+const TEXT = '#a1a1aa';
+const TEXT_DIM = '#71717a';
+const WHITE = '#ffffff';
+const FONT = "12px 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 
-function drawGrid(ctx: CanvasRenderingContext2D, size: RenderSize, vp: Viewport): void {
-  let spacing = 100;
-  while (spacing * vp.zoom < 24) spacing *= 5; // keep the grid readable when zoomed out
+const DOT_SPACING = 24; // world units; drawn on a 24 x 24 matrix at zoom 1
+const MIN_DOT_PX = 10; // thin the matrix out when zoomed far out
+
+function drawDotGrid(ctx: CanvasRenderingContext2D, size: RenderSize, vp: Viewport): void {
+  let step = DOT_SPACING;
+  while (step * vp.zoom < MIN_DOT_PX) step *= 2;
   const { width: w, height: h } = size;
   const left = vp.cx - w / 2 / vp.zoom;
   const right = vp.cx + w / 2 / vp.zoom;
   const top = vp.cy - h / 2 / vp.zoom;
   const bottom = vp.cy + h / 2 / vp.zoom;
-  ctx.strokeStyle = GRID;
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  for (let x = Math.floor(left / spacing) * spacing; x <= right; x += spacing) {
-    const sx = Math.round((x - vp.cx) * vp.zoom + w / 2) + 0.5;
-    ctx.moveTo(sx, 0);
-    ctx.lineTo(sx, h);
+  ctx.fillStyle = DOT;
+  for (let x = Math.floor(left / step) * step; x <= right; x += step) {
+    const sx = Math.round((x - vp.cx) * vp.zoom + w / 2);
+    for (let y = Math.floor(top / step) * step; y <= bottom; y += step) {
+      const sy = Math.round((y - vp.cy) * vp.zoom + h / 2);
+      ctx.fillRect(sx - 1, sy - 1, 2, 2);
+    }
   }
-  for (let y = Math.floor(top / spacing) * spacing; y <= bottom; y += spacing) {
-    const sy = Math.round((y - vp.cy) * vp.zoom + h / 2) + 0.5;
-    ctx.moveTo(0, sy);
-    ctx.lineTo(w, sy);
-  }
-  ctx.stroke();
 }
 
 export function render(
@@ -53,31 +54,33 @@ export function render(
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.fillStyle = BG;
   ctx.fillRect(0, 0, w, h);
-  drawGrid(ctx, size, vp);
+  drawDotGrid(ctx, size, vp);
 
   const listener = scene.listener.position;
 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';
-  ctx.font = '12px system-ui, sans-serif';
+  ctx.font = FONT;
 
   for (const e of scene.emitters) {
     const c = worldToScreen(vp, e.position, w, h);
     const r = e.radius * vp.zoom;
     const d = dist(listener, e.position);
     const active = isInside(d, e.radius);
-    const color = e.muted ? EMITTER_MUTED : EMITTER;
+    const color = e.muted ? TEXT_DIM : ACCENT;
     const selected = e.id === selectedId;
 
     ctx.beginPath();
     ctx.arc(c.x, c.y, r, 0, Math.PI * 2);
     if (active) {
-      ctx.fillStyle = e.muted ? 'rgba(136,136,136,0.15)' : 'rgba(90,176,255,0.18)';
+      ctx.globalAlpha = e.muted ? 0.25 : 0.55;
+      ctx.fillStyle = e.muted ? DOT : TINT;
       ctx.fill();
+      ctx.globalAlpha = 1;
     }
     ctx.setLineDash(e.muted ? [6, 4] : []);
     ctx.lineWidth = selected ? 3 : 1.5;
-    ctx.strokeStyle = selected ? '#ffffff' : color;
+    ctx.strokeStyle = selected && !e.muted ? ACCENT_BRIGHT : color;
     ctx.stroke();
     ctx.setLineDash([]);
 
@@ -101,36 +104,45 @@ export function render(
     ctx.fillText(label, c.x, c.y - 9);
   }
 
+  const l = worldToScreen(vp, listener, w, h);
+
   if (target) {
-    const ls = worldToScreen(vp, listener, w, h);
     const t = worldToScreen(vp, target, w, h);
-    ctx.setLineDash([6, 6]);
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = 'rgba(255,179,71,0.6)';
+    // dotted path, new palette
+    ctx.setLineDash([2, 7]);
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = ACCENT_BRIGHT;
     ctx.beginPath();
-    ctx.moveTo(ls.x, ls.y);
+    ctx.moveTo(l.x, l.y);
     ctx.lineTo(t.x, t.y);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = LISTENER;
+    ctx.lineCap = 'butt';
+    // blue X with a sharp white outer stroke: white pass underneath, blue pass on top
+    const s = 7;
     ctx.beginPath();
-    ctx.arc(t.x, t.y, 9, 0, Math.PI * 2);
-    ctx.moveTo(t.x - 14, t.y);
-    ctx.lineTo(t.x + 14, t.y);
-    ctx.moveTo(t.x, t.y - 14);
-    ctx.lineTo(t.x, t.y + 14);
+    ctx.moveTo(t.x - s, t.y - s);
+    ctx.lineTo(t.x + s, t.y + s);
+    ctx.moveTo(t.x + s, t.y - s);
+    ctx.lineTo(t.x - s, t.y + s);
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = WHITE;
+    ctx.stroke();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = ACCENT;
     ctx.stroke();
   }
 
-  const l = worldToScreen(vp, listener, w, h);
+  // listener: small bright-blue filled dot, sharp white outer stroke, plus label
   ctx.beginPath();
-  ctx.arc(l.x, l.y, 14, 0, Math.PI * 2);
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = LISTENER;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(l.x, l.y, 7, 0, Math.PI * 2);
-  ctx.fillStyle = LISTENER;
+  ctx.arc(l.x, l.y, 6, 0, Math.PI * 2);
+  ctx.fillStyle = ACCENT;
   ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = WHITE;
+  ctx.stroke();
+  ctx.fillStyle = TEXT;
+  ctx.textBaseline = 'top';
+  ctx.fillText('Listener', l.x, l.y + 12);
 }

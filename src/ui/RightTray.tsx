@@ -4,18 +4,25 @@ import { filesToTracks } from '../io/fileIngest';
 import { blobStore } from '../store/blobStore';
 import { useSceneStore } from '../store/sceneStore';
 import type { Emitter, EmitterRuntime, GapMode } from '../types';
+import { Dock } from './Dock';
 import { NumberField } from './NumberField';
 import { useDragReorder } from './useDragReorder';
 
 export function RightTray() {
   const open = useSceneStore((s) => s.ui.queuePanelOpen);
   const emitter = useSceneStore((s) => s.scene.emitters.find((e) => e.id === s.selectedEmitterId));
-  if (!open) return null;
   return (
-    <div className="right-tray">
-      <h3>Queue</h3>
-      {emitter ? <QueueManager key={emitter.id} emitter={emitter} /> : <p className="muted">Select an emitter to manage its sounds.</p>}
-    </div>
+    <Dock id="queue" side="right" open={open} onToggle={() => useSceneStore.getState().toggleQueuePanel()} label="queue">
+      <div className="right-tray">
+        <h3>Queue</h3>
+        {open &&
+          (emitter ? (
+            <QueueManager key={emitter.id} emitter={emitter} />
+          ) : (
+            <p className="muted">Select an emitter to manage its sounds.</p>
+          ))}
+      </div>
+    </Dock>
   );
 }
 

@@ -1,14 +1,17 @@
 import { MIN_RADIUS, useSceneStore } from '../store/sceneStore';
+import { Dock } from './Dock';
 import { NumberField } from './NumberField';
 
 export function Inspector() {
   const emitter = useSceneStore((s) => s.scene.emitters.find((e) => e.id === s.selectedEmitterId));
+  const open = useSceneStore((s) => s.ui.inspectorOpen);
   if (!emitter) return null;
 
   const update = useSceneStore.getState().updateEmitter;
   const id = emitter.id;
 
   return (
+    <Dock id="inspector" side="left" open={open} onToggle={() => useSceneStore.getState().toggleInspector()} label="inspector">
     <div className="inspector">
       <h3>Inspector</h3>
       <label className="field-col">
@@ -68,5 +71,6 @@ export function Inspector() {
         />
       </div>
     </div>
+    </Dock>
   );
 }

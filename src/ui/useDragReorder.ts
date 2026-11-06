@@ -187,7 +187,7 @@ export function useDragReorder(options: DragReorderOptions): DragReorderApi {
         transform: `translateY(${view.dy}px)`,
         transition: 'none',
         boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
-        outline: '1px solid #5ab0ff',
+        outline: '1px solid #3b82f6',
       };
     }
     let shift = 0;
