@@ -1,10 +1,17 @@
 # Getting Started
 
+<img width="1820" height="1011" alt="image" src="https://github.com/user-attachments/assets/1a4016bd-185d-4316-948e-d44a3323484b" />
+
+- Open the website! https://cpduncan.github.io/ttsound/
+- (and have music files ready to upload.) (MP3, WAV, OGG, M4A, etc.).
+
 - Click Add Emitter to create a new sound/music emitter.
 - Select an emitter and open its Inspector and Queue Manager.
 - Add audio file(s) using Add Files or Add Folder.
+
 - Drag the Listener node into an emitter's radius to hear audio.
 - Drag the listener between emitters to blend multiple sounds based on proximity.
+- Automatically move the listener to a specified target point at the set speed with "Animate Listener".
 
 # Controls
 
